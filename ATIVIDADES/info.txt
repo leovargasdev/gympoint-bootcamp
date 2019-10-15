@@ -1,0 +1,4 @@
+Descrição das atividades desta pasta.
+
+Desafio 1: Conceitos do NodeJS
+--> Criar uma aplicação para armazenar projetos e suas tarefas do zero utilizando Express.

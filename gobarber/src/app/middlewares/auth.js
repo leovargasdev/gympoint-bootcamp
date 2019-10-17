@@ -6,7 +6,6 @@ import authConfig from '../../config/auth';
 export default async (req, res, next) => {
   const authHeater = req.headers.authorization;
 
-  // console.log(authHeater);
   if (!authHeater) {
     return res.status(401).json({ error: '' });
   }

@@ -13,10 +13,21 @@ class NotificationControler {
         .json({ error: 'Only providers can load notifications.' });
     }
 
-    const notifications = await Notification.find({ user: req.userId })
+    const notification = await Notification.find({ user: req.userId })
       .sort({ createdAt: -1 })
       .limit(20);
-    return res.json(notifications);
+    return res.json(notification);
+  }
+
+  async update(req, res) {
+    const { id } = req.params;
+
+    const notification = await Notification.findByIdAndUpdate(
+      id,
+      { read: true },
+      { new: true }
+    );
+    return res.json(notification);
   }
 }
 

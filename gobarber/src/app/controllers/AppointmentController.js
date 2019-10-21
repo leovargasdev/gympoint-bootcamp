@@ -1,10 +1,11 @@
 import * as Yup from 'yup';
-import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import Appointment from '../models/Appointment';
 import User from '../models/User';
 import File from '../models/File';
 import Notification from '../schemas/Notification';
+import Mail from '../../lib/Mail';
 
 class AppointmentController {
   async index(req, res) {
@@ -92,6 +93,57 @@ class AppointmentController {
     await Notification.create({
       content: `Novo agendamento de ${user.name} para ${formatDate}`,
       user: provider_id,
+    });
+
+    return res.json(appointment);
+  }
+
+  async delete(req, res) {
+    const appointment = await Appointment.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          as: 'provider',
+          attributes: ['name', 'email'],
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name'],
+        },
+      ],
+    });
+
+    if (appointment.user_id !== req.userId) {
+      return res.status(400).json({
+        error: "You don't have permissionto cancel this appointment.",
+      });
+    }
+
+    // Subitrair 2 horas da data de agendamento
+    const dataWithSub = subHours(appointment.date, 2);
+    // Um agendamento não pode mais ser cancelado nas 2 últimas horas antes do horário marcado.
+    if (isBefore(dataWithSub, new Date())) {
+      return res.status(400).json({
+        error: 'You can only cancel appointment 2 hours in advance.',
+      });
+    }
+
+    appointment.canceled_at = new Date();
+
+    await appointment.save();
+
+    await Mail.sendMail({
+      to: `${appointment.provider.name} <${appointment.provider.email}>`,
+      subject: 'Agendamento Cancelado',
+      template: 'cancellation',
+      context: {
+        provider: appointment.provider.name,
+        user: appointment.user.name,
+        date: format(appointment.date, "'dia' dd 'de' MMMM', às' H:mm'h'", {
+          locale: pt,
+        }),
+      },
     });
 
     return res.json(appointment);

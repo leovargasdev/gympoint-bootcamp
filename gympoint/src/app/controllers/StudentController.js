@@ -68,6 +68,13 @@ class StudentController {
 
     return res.json(students);
   }
+
+  async delete(req, res) {
+    const { id } = req.params;
+    console.log('id', id);
+    await Student.destroy({ where: { id } });
+    return res.json({ mensage: 'Student removed success' });
+  }
 }
 
 export default new StudentController();

@@ -23,6 +23,7 @@ routes.use(authMiddleware);
 routes.post('/students', StudentController.store);
 routes.get('/students', StudentController.index);
 routes.put('/students/:student_id/edit', StudentController.update);
+routes.delete('/students/:id', StudentController.delete);
 
 // Rotas referente a tabela Plans
 routes.post('/plans', PlanController.store);

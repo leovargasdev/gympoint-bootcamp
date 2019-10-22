@@ -23,7 +23,6 @@ module.exports = {
       },
       start_date: {
         type: Sequelize.DATE,
-        unique: true,
         allowNull: true,
       },
       end_date: {

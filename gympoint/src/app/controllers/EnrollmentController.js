@@ -4,6 +4,8 @@ import { addMonths } from 'date-fns';
 import Plan from '../models/Plan';
 import Student from '../models/Student';
 import Enrollment from '../models/Enrollment';
+import Queue from '../../lib/Queue';
+import SuccessEnrollmentMail from '../jobs/SuccessEnrollmentMail';
 
 class EnrollmentController {
   async store(req, res) {
@@ -20,8 +22,8 @@ class EnrollmentController {
     const plan = await Plan.findByPk(plan_id);
     if (!plan) return res.status(401).json({ error: 'Plan not found' });
 
-    const studant = await Student.findByPk(student_id);
-    if (!studant) return res.status(401).json({ error: 'Studant not found' });
+    const student = await Student.findByPk(student_id);
+    if (!student) return res.status(401).json({ error: 'Student not found' });
 
     const price = plan.duration * plan.price;
 
@@ -31,6 +33,11 @@ class EnrollmentController {
       start_date,
       end_date: addMonths(new Date(start_date), plan.duration),
       price,
+    });
+
+    await Queue.add(SuccessEnrollmentMail.key, {
+      enrollment,
+      student,
     });
 
     return res.json(enrollment);

@@ -50,7 +50,6 @@ class AppointmentController {
 
     // Usuário não pode criar reserva em seus próprios serviços
     if (provider_id === req.userId) {
-      console.log(provider_id, req.userId);
       return res.status(401).json({
         error: 'You can not create appointments in your own appointments.',
       });

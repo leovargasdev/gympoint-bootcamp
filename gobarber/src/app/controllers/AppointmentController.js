@@ -134,9 +134,9 @@ class AppointmentController {
 
     await appointment.save();
 
-    // await Queue.add(CancellationMail.key, {
-    //   appointment,
-    // });
+    await Queue.add(CancellationMail.key, {
+      appointment,
+    });
 
     return res.json(appointment);
   }

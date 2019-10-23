@@ -32,7 +32,7 @@ class PlanController {
   async delete(req, res) {
     const { id } = req.params;
     await Plan.destroy({ where: { id } });
-    return res.json({ mensage: 'Plan destroy success' });
+    return res.json({ message: 'Plan successfully removed' });
   }
 
   async update(req, res) {

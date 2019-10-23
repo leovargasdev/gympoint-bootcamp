@@ -33,6 +33,9 @@ routes.put('/plans/:id', PlanController.update);
 
 // Rotas referente a tabela Enrollments
 routes.post('/enrollments', EnrollmentController.store);
+routes.get('/enrollments', EnrollmentController.index);
+routes.put('/enrollments/:id', EnrollmentController.update);
+routes.delete('/enrollments/:id', EnrollmentController.delete);
 
 // routes.post('/files', upload.single('file'), (req, res) => {
 //   return res.json({ ok: true });

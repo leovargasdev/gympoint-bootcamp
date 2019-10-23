@@ -3,7 +3,7 @@ import pt from 'date-fns/locale/pt';
 import Mail from '../../lib/Mail';
 
 class CreateHelpOrderMail {
-  get Key() {
+  get key() {
     return 'CreateHelpOrderMail';
   }
 
@@ -12,13 +12,14 @@ class CreateHelpOrderMail {
     const { question, createdAt } = data.helpOrder;
     await Mail.sendMail({
       to: `${name} <${email}>`,
-      subject: 'Matricula Cadastrada',
+      subject: 'Solicitação de Auxílio',
       template: 'createHelpOrder',
       context: {
+        name,
         question,
         createdAt: format(
           parseISO(createdAt),
-          "'às' H:mm'h' 'do dia' dd 'de' MMMM' 'de' yyyy",
+          "'às' H:mm'h' 'do dia' dd 'de' MMMM 'de' yyyy",
           {
             locale: pt,
           }

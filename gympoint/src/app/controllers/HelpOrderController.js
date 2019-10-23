@@ -3,6 +3,7 @@ import Student from '../models/Student';
 import HelpOrder from '../models/HelpOrder';
 import Queue from '../../lib/Queue';
 import CreateHelpOrderMail from '../jobs/CreateHelpOrderMail';
+import AnswerHelpOrder from '../jobs/AnswerHelpOrder';
 
 class HelpOrderController {
   async store(req, res) {
@@ -46,6 +47,13 @@ class HelpOrderController {
     await helpOrder.update({
       answer,
       answer_at: new Date(),
+    });
+
+    const student = await Student.findByPk(helpOrder.student_id);
+
+    await Queue.add(AnswerHelpOrder.key, {
+      student,
+      helpOrder,
     });
 
     return res.json(helpOrder);

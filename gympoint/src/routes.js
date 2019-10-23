@@ -9,6 +9,7 @@ import StudentController from './app/controllers/StudentController';
 import PlanController from './app/controllers/PlanController';
 import EnrollmentController from './app/controllers/EnrollmentController';
 import CheckinController from './app/controllers/CheckinController';
+import HelpOrderController from './app/controllers/HelpOrderController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -21,8 +22,15 @@ routes.post('/sessions', SessionController.store);
 routes.post('/students/:student_id/checkins', CheckinController.store);
 routes.get('/students/:student_id/checkins', CheckinController.index);
 
+// Help Orders
+routes.post('/students/:student_id/help-orders', HelpOrderController.store);
+routes.get('/students/:student_id/help-orders', HelpOrderController.index);
+
 // Todas abaixo desse middleware devem ter um usuário autenticado, caso contrario o serviço é interrompido
 routes.use(authMiddleware);
+
+// Help Orders
+routes.put('/help-orders/:id/answer', HelpOrderController.update);
 
 // Rotas referente a tabela Students
 routes.post('/students', StudentController.store);
@@ -41,9 +49,5 @@ routes.post('/enrollments', EnrollmentController.store);
 routes.get('/enrollments', EnrollmentController.index);
 routes.put('/enrollments/:id', EnrollmentController.update);
 routes.delete('/enrollments/:id', EnrollmentController.delete);
-
-// routes.post('/files', upload.single('file'), (req, res) => {
-//   return res.json({ ok: true });
-// });
 
 export default routes;

@@ -10,7 +10,14 @@ import SuccessEnrollmentMail from '../jobs/SuccessEnrollmentMail';
 class EnrollmentController {
   async index(req, res) {
     const enrollments = await Enrollment.findAll({
-      attributes: ['id', 'price', 'start_date', 'end_date', 'dt_format'],
+      attributes: [
+        'id',
+        'price',
+        'start_date',
+        'end_date',
+        'dt_format',
+        'active',
+      ],
       include: [
         {
           model: Student,
@@ -30,6 +37,7 @@ class EnrollmentController {
         title_plan: e.plan.title,
         price: e.price,
         duration: e.dt_format,
+        active: e.active,
       };
     });
     return res.json(result);

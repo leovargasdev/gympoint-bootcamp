@@ -23,6 +23,8 @@ class StudentController {
     if (!(await schema.isValid(req.body)))
       return res.status(400).json({ error: 'Validation fails.' });
 
+    // VERIFICAR SE O USUÁRIO JÁ EXISTE, TESTANDO O EMAIL
+
     const student = await Student.create(req.body);
 
     return res.json(student);
@@ -63,7 +65,7 @@ class StudentController {
 
   async index(req, res) {
     const students = await Student.findAll({
-      attributes: ['id', 'name', 'age'],
+      attributes: ['id', 'name', 'age', 'email'],
     });
 
     return res.json(students);
@@ -71,7 +73,6 @@ class StudentController {
 
   async delete(req, res) {
     const { id } = req.params;
-    console.log('id', id);
     await Student.destroy({ where: { id } });
     return res.json({ mensage: 'Student removed success' });
   }

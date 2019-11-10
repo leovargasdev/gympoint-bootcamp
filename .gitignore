@@ -1,9 +1,5 @@
-gobarber/node_modules/
-gobarber/temp/uploads/
-gobarber/.env
+web-gympoint/node_modules/
 
 gympoint/node_modules/
 gympoint/.env
 
-ATIVIDADES/desafio-01/node_modules/
-ATIVIDADES/modulo04/node_modules/

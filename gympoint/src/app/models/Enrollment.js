@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize';
 import pt from 'date-fns/locale/pt';
-import { format } from 'date-fns';
+import { format, isBefore, isAfter } from 'date-fns';
 
 class Enrollment extends Model {
   static init(sequelize) {
@@ -19,6 +19,15 @@ class Enrollment extends Model {
               locale: pt,
             });
             return `${start} até ${end}`;
+          },
+        },
+        active: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return (
+              isBefore(this.get('start_date'), new Date()) &&
+              isAfter(this.get('end_date'), new Date())
+            );
           },
         },
       },

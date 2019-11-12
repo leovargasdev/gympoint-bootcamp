@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
-import { Container, StudentsTable } from './styles';
+import {
+  Container,
+  StudentsTable,
+  Age,
+  ConfigButtons,
+  BtnEdit,
+  BtnRemove,
+} from './styles';
 
 import api from '~/services/api';
 
@@ -16,13 +23,10 @@ export default function Students() {
     }
 
     loadStudents();
-  }, []);
+  }, [students]);
 
-  function handleEditStudent(id) {
-    console.log('id:', id);
-  }
   function handleRemoveStudent(id) {
-    console.log('id:', id);
+    console.tron.log('id:', id);
   }
 
   return (
@@ -30,7 +34,7 @@ export default function Students() {
       <header>
         <strong>Gerenciando alunos</strong>
         <div>
-          <Link to="/">
+          <Link to="/student/new">
             <MdAdd size={14} color="#fff" />
             <span>Cadastrar</span>
           </Link>
@@ -44,7 +48,6 @@ export default function Students() {
             <th>EMAIL</th>
             <th>IDADE</th>
             <th />
-            {/* config  */}
           </tr>
         </thead>
         <tbody>
@@ -60,22 +63,19 @@ export default function Students() {
               </td>
               {/* age */}
               <td>
-                <strong>{student.age}</strong>
+                <Age>{student.age}</Age>
               </td>
               {/* config */}
               <td>
-                <button
-                  type="button"
-                  onClick={() => handleEditStudent('student_id')}
-                >
-                  editar
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveStudent('student_id')}
-                >
-                  apagar
-                </button>
+                <ConfigButtons>
+                  <BtnEdit to={`/student/${student.id}/edit`}>editar</BtnEdit>
+                  <BtnRemove
+                    type="button"
+                    onClick={() => handleRemoveStudent('student_id')}
+                  >
+                    apagar
+                  </BtnRemove>
+                </ConfigButtons>
               </td>
             </tr>
           ))}

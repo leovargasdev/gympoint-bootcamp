@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
+import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
-  max-width: 100%;
+  width: 100%;
   margin: 40px 80px;
   /* Deixa todos os itens um abaixo do outro */
   display: flex;
@@ -60,46 +61,66 @@ export const Container = styled.div`
 
 export const StudentsTable = styled.table`
   width: 100%;
+  background: #fff;
+  border-radius: 6px;
+  padding: 5px 10px;
 
   thead th {
     color: #999;
     text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    color: #444;
     padding: 12px;
   }
+
   tbody td {
     padding: 12px;
     border-bottom: 1px solid #eee;
   }
-  img {
-    height: 100px;
-  }
-
-  strong {
-    color: #333;
-    display: block;
-  }
 
   span {
-    margin-top: 5px;
-    font-size: 18px;
-    font-weight: bold;
+    color: #666;
     display: block;
+    line-height: 20px;
+    font-weight: 500;
   }
-  div {
-    display: flex;
-    align-items: center;
+`;
 
-    input {
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      color: #666;
-      padding: 6px;
-      width: 50px;
-    }
+export const Age = styled.span`
+  display: flex;
+  align-self: center;
+`;
+export const ConfigButtons = styled.div`
+  direction: ltr;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const BtnEdit = styled(Link)`
+  background: none;
+  border: 0;
+  font-size: 15px;
+  padding: 5px;
+  border-radius: 4px;
+  color: #4d85ee;
+  margin-right: 12px;
+
+  &:hover {
+    background: #4d85ee;
+    color: #fff;
   }
-  button {
-    background: none;
-    border: 0;
-    padding: 6px;
+`;
+export const BtnRemove = styled.button`
+  color: #de3b3b;
+  background: none;
+  border: 0;
+  font-size: 15px;
+  padding: 5px;
+  border-radius: 4px;
+
+  &:hover {
+    background: #de3b3b;
+    color: #fff;
   }
 `;

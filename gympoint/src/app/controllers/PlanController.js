@@ -23,15 +23,16 @@ class PlanController {
   }
 
   async index(req, res) {
-    const plans = await Plan.findAll({
+    const { plan_id } = req.params;
+    const plan = await Plan.findByPk(plan_id, {
       attributes: ['id', 'title', 'duration', 'price'],
     });
-    return res.json(plans);
+    return res.json(plan);
   }
 
   async delete(req, res) {
-    const { id } = req.params;
-    await Plan.destroy({ where: { id } });
+    const { plan_id } = req.params;
+    await Plan.destroy({ where: { plan_id } });
     return res.json({ message: 'Plan successfully removed' });
   }
 
@@ -48,7 +49,7 @@ class PlanController {
       return res.status(400).json({ error: 'Validation fails.' });
 
     const { title } = req.body;
-    const plan = await Plan.findByPk(req.params.id);
+    const plan = await Plan.findByPk(req.params.plan_id);
     // O título do plano deve ser único, esse condicional garante que não vá existir dois planos com o mesmo title
     if (title && plan.title !== title) {
       const checkTitlePlan = await Plan.findOne({ where: { title } });

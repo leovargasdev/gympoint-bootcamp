@@ -5,8 +5,13 @@ import { Router } from 'express';
 // import multerConfig from './config/multer';
 
 import SessionController from './app/controllers/SessionController';
+
 import StudentController from './app/controllers/StudentController';
+import StudentsController from './app/controllers/StudentsController';
+
 import PlanController from './app/controllers/PlanController';
+import PlansController from './app/controllers/PlansController';
+
 import EnrollmentController from './app/controllers/EnrollmentController';
 import CheckinController from './app/controllers/CheckinController';
 import HelpOrderController from './app/controllers/HelpOrderController';
@@ -34,15 +39,21 @@ routes.put('/help-orders/:id/answer', HelpOrderController.update);
 
 // Rotas referente a tabela Students
 routes.post('/students', StudentController.store);
-routes.get('/students', StudentController.index);
 routes.put('/students/:student_id/edit', StudentController.update);
 routes.delete('/students/:id', StudentController.delete);
+routes.get('/student/:student_id', StudentController.index);
+
+// Listar todos Students
+routes.get('/students', StudentsController.index);
 
 // Rotas referente a tabela Plans
 routes.post('/plans', PlanController.store);
-routes.get('/plans', PlanController.index);
-routes.delete('/plans/:id', PlanController.delete);
-routes.put('/plans/:id', PlanController.update);
+routes.get('/plan/:plan_id', PlanController.index);
+routes.delete('/plan/:plan_id', PlanController.delete);
+routes.put('/plan/:plan_id', PlanController.update);
+
+// Listar todos Plans
+routes.get('/plans', PlansController.index);
 
 // Rotas referente a tabela Enrollments
 routes.post('/enrollments', EnrollmentController.store);

@@ -64,9 +64,8 @@ class StudentController {
   }
 
   async index(req, res) {
-    const students = await Student.findAll({
-      attributes: ['id', 'name', 'age', 'email'],
-    });
+    const { student_id } = req.params;
+    const students = await Student.findByPk(student_id);
 
     return res.json(students);
   }

@@ -2,7 +2,7 @@ import produce from 'immer';
 
 const INITIAL_STATE = {};
 
-export default function student(state = INITIAL_STATE, action) {
+export default function plan(state = INITIAL_STATE, action) {
   return produce(state, draft => {
     switch (action.type) {
       // case '@auth/SIGN_IN_SUCCESS': {

@@ -53,6 +53,7 @@ export function* updateStudent({ payload }) {
     yield put(updateStudentSuccess(response.data));
     history.push('/students');
   } catch (err) {
+    console.tron.log(err.message);
     toast.error('Falha ao atualizar aluno!!!');
     yield put(updateStudentFailure());
   }

@@ -46,7 +46,7 @@ export function* updateStudent({ payload }) {
       weight: Number(weight.replace(',', '.')),
     };
 
-    const response = yield call(api.put, `/students/${id}/edit`, student);
+    const response = yield call(api.put, `/student/${id}`, student);
 
     toast.success('Aluno atualizado com sucesso!!!');
 

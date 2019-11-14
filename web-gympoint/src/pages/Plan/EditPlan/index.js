@@ -1,11 +1,11 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import api from '~/services/api';
 import { Container } from './styles';
-// import { updatePlanRequest } from '~/store/modules/plan/actions';
+import { updatePlanRequest } from '~/store/modules/plan/actions';
 
 const schema = Yup.object().shape({
   title: Yup.string().required('O Titulo do plano é obrigatório'),
@@ -17,7 +17,8 @@ export default function EditPlan(props) {
   const dispatch = useDispatch();
   const [plan, setPlan] = useState({});
   const [duration, setDuration] = useState(0);
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState('');
+  const [total, setTotal] = useState(0);
   const { id } = props.match.params;
 
   useEffect(() => {
@@ -32,13 +33,12 @@ export default function EditPlan(props) {
     loadPlan();
   }, [id]);
 
-  // const total = useMemo(
-  //   () => Number(price.replace(',', '.') || 1) * (duration || 1),
-  //   [price, duration]
-  // );
+  useEffect(() => {
+    setTotal(Number(price.replace(',', '.')) * duration);
+  }, [price, duration]);
 
   function handleSubmit(data) {
-    // dispatch(updatePlanRequest(data));
+    dispatch(updatePlanRequest({ ...data, id }));
   }
 
   return (
@@ -70,7 +70,7 @@ export default function EditPlan(props) {
         />
 
         <label htmlFor="total">Total</label>
-        <Input name="total" value="total" disabled />
+        <Input name="total" value={total} disabled />
 
         <button type="submit">Criar Plano</button>
       </Form>

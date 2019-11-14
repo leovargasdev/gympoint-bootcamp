@@ -27,4 +27,29 @@ export function* newPlan({ payload }) {
   }
 }
 
-export default all([takeLatest('@plan/NEW_PLAN_REQUEST', newPlan)]);
+export function* updatePlan({ payload }) {
+  try {
+    const { id, price, duration, title } = payload.plan;
+
+    const plan = {
+      duration,
+      title,
+      price: Number(price.replace(',', '.')),
+    };
+
+    const response = yield call(api.put, `/plan/${id}`, plan);
+
+    toast.success('Plano atualizado com sucesso!!!');
+
+    yield put(newPlanSuccess(response.data));
+    history.push('/plans');
+  } catch (err) {
+    toast.error('Falha ao atualizar o plano!!!');
+    yield put(newPlanFailure());
+  }
+}
+
+export default all([
+  takeLatest('@plan/NEW_PLAN_REQUEST', newPlan),
+  takeLatest('@plan/UPDATE_PLAN_REQUEST', updatePlan),
+]);

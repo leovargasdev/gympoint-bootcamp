@@ -39,7 +39,7 @@ routes.put('/help-orders/:id/answer', HelpOrderController.update);
 
 // Rotas referente a tabela Students
 routes.post('/students', StudentController.store);
-routes.put('/students/:student_id/edit', StudentController.update);
+routes.put('/student/:student_id', StudentController.update);
 routes.delete('/students/:id', StudentController.delete);
 routes.get('/student/:student_id', StudentController.index);
 

@@ -13,6 +13,8 @@ import PlanController from './app/controllers/PlanController';
 import PlansController from './app/controllers/PlansController';
 
 import EnrollmentController from './app/controllers/EnrollmentController';
+import EnrollmentsController from './app/controllers/EnrollmentsController';
+
 import CheckinController from './app/controllers/CheckinController';
 import HelpOrderController from './app/controllers/HelpOrderController';
 
@@ -57,8 +59,10 @@ routes.get('/plans', PlansController.index);
 
 // Rotas referente a tabela Enrollments
 routes.post('/enrollments', EnrollmentController.store);
-routes.get('/enrollments', EnrollmentController.index);
+routes.get('/enrollment/:id', EnrollmentController.index);
 routes.put('/enrollments/:id', EnrollmentController.update);
 routes.delete('/enrollments/:id', EnrollmentController.delete);
 
+// Listar todos os Enrollments
+routes.get('/enrollments', EnrollmentsController.index);
 export default routes;

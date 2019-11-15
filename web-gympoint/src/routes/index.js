@@ -12,6 +12,10 @@ import Plan from '~/pages/Plan/';
 import NewPlan from '~/pages/Plan/NewPlan';
 import EditPlan from '~/pages/Plan/EditPlan';
 
+import Enrollment from '~/pages/Enrollment/';
+import NewEnrollment from '~/pages/Enrollment/NewEnrollment';
+import EditEnrollment from '~/pages/Enrollment/EditEnrollment';
+
 export default function Routes() {
   return (
     <Switch>
@@ -24,6 +28,10 @@ export default function Routes() {
       <Route path="/plans" exact component={Plan} isPrivate />
       <Route path="/plan/new" component={NewPlan} isPrivate />
       <Route path="/plan/:id/edit" component={EditPlan} isPrivate />
+
+      <Route path="/enrollments" component={Enrollment} isPrivate />
+      <Route path="/enrollment/new" component={NewEnrollment} isPrivate />
+      <Route path="/enrollment/:id/edit" component={EditEnrollment} isPrivate />
     </Switch>
   );
 }

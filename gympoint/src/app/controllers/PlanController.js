@@ -25,7 +25,7 @@ class PlanController {
   async index(req, res) {
     const { plan_id } = req.params;
     const plan = await Plan.findByPk(plan_id, {
-      attributes: ['id', 'title', 'duration', 'price'],
+      attributes: ['id', 'title', 'duration', 'price', 'total'],
     });
     return res.json(plan);
   }

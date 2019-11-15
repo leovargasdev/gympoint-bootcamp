@@ -16,25 +16,23 @@ const schema = Yup.object().shape({
 export default function EditPlan(props) {
   const dispatch = useDispatch();
   const [plan, setPlan] = useState({});
-  const [duration, setDuration] = useState(0);
-  const [price, setPrice] = useState('');
-  const [total, setTotal] = useState(0);
   const { id } = props.match.params;
 
   useEffect(() => {
     async function loadPlan() {
       const response = await api.get(`/plan/${id[0]}`);
-      const { price: p, duration: d } = response.data;
       setPlan(response.data);
-      setDuration(d);
-      setPrice(p.toString());
     }
 
     loadPlan();
   }, [id]);
 
+  const [duration, setDuration] = useState(plan.duration);
+  const [price, setPrice] = useState(plan.price);
+  const [total, setTotal] = useState(plan.total);
+
   useEffect(() => {
-    setTotal(Number(price.replace(',', '.')) * duration);
+    setTotal((Number(price) * duration).toFixed(2));
   }, [price, duration]);
 
   function handleSubmit(data) {
@@ -56,17 +54,12 @@ export default function EditPlan(props) {
         <Input name="title" placeholder="Nome do plano" />
 
         <label htmlFor="duration">Duração (em meses)</label>
-        <Input
-          name="duration"
-          value={duration}
-          onChange={e => setDuration(e.target.value)}
-        />
+        <Input name="duration" onChange={e => setDuration(e.target.value)} />
 
         <label htmlFor="price">Preço Mensal</label>
         <Input
           name="price"
-          value={price}
-          onChange={e => setPrice(e.target.value)}
+          onChange={e => setPrice(e.target.value.replace(',', '.'))}
         />
 
         <label htmlFor="total">Total</label>

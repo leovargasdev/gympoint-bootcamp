@@ -25,7 +25,7 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased; /* Deixa a fonte mais definida */
   }
 
-  body, input, button, label{
+  body, input, button, label, select{
     font: 14px 'Roboto', sans-serif;
   }
   a{
@@ -38,7 +38,7 @@ export default createGlobalStyle`
     cursor: pointer;
   }
 
-  form {
+  form{
     background: #fff;
     display: flex;
     flex-direction: column;
@@ -90,6 +90,16 @@ export default createGlobalStyle`
       align-self: flex-start;
       margin: 0 0 10px;
       font-weight: bold;
+    }
+
+    select {
+      background: #fff;
+      padding: 10px 25px;
+      option {
+        padding: 0 8px;
+        font-size: 20px;
+        line-height: 2rem;
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
-import { addMonths } from 'date-fns';
+import { addMonths, format } from 'date-fns';
+
 import Plan from '../models/Plan';
 import Student from '../models/Student';
 import Enrollment from '../models/Enrollment';
@@ -9,38 +10,17 @@ import SuccessEnrollmentMail from '../jobs/SuccessEnrollmentMail';
 
 class EnrollmentController {
   async index(req, res) {
-    const enrollments = await Enrollment.findAll({
-      attributes: [
-        'id',
-        'price',
-        'start_date',
-        'end_date',
-        'dt_format',
-        'active',
-      ],
-      include: [
-        {
-          model: Student,
-          as: 'student',
-          attributes: ['name'],
-        },
-        {
-          model: Plan,
-          as: 'plan',
-          attributes: ['title'],
-        },
-      ],
-    });
-    const result = enrollments.map(e => {
-      return {
-        student: e.student.name,
-        title_plan: e.plan.title,
-        price: e.price,
-        duration: e.dt_format,
-        active: e.active,
-      };
-    });
-    return res.json(result);
+    const { id } = req.params;
+
+    const {
+      start_date,
+      end_date,
+      price,
+      plan_id,
+      student_id,
+    } = await Enrollment.findByPk(id);
+
+    return res.json({ start_date, end_date, price, plan_id, student_id });
   }
 
   async update(req, res) {

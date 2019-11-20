@@ -54,7 +54,7 @@ export default createGlobalStyle`
       margin: 8px 0;
     }
 
-    input {
+    input, textarea {
       background: none;
       border: 1px solid #eee;
       border-radius: 4px;

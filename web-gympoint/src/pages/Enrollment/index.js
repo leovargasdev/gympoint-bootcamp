@@ -23,6 +23,11 @@ export default function Enrollment() {
 
     loadEnrollments();
   }, []);
+
+  // function handleEditEnrollment(id){
+  //   console.tron.log(id)
+  // }
+
   return (
     <Container>
       <header>
@@ -73,7 +78,9 @@ export default function Enrollment() {
               {/* config */}
               <td>
                 <ConfigButtons>
+                  {/* <BtnEdit onClick={() => handleEditEnrollment(enrollment.id)}> */}
                   <BtnEdit to={`/enrollment/${enrollment.id}/edit`}>
+                    {/* to={`/enrollment/${enrollment.id}/edit`} */}
                     editar
                   </BtnEdit>
                   <BtnRemove type="button">apagar</BtnRemove>

@@ -49,7 +49,7 @@ export default function NewStudent() {
         <label htmlFor="weight">Altura</label>
         <Input name="weight" placeholder="1,90" />
 
-        <button type="submit">Criar estudante</button>
+        <button type="submit">Criar Aluno</button>
       </Form>
     </Container>
   );

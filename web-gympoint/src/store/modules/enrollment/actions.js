@@ -18,22 +18,22 @@ export function newEnrollmentFailure() {
   };
 }
 
-// export function updateStudentRequest(student) {
-//   return {
-//     type: '@student/UPDATE_ENROLLMENT_REQUEST',
-//     payload: { student },
-//   };
-// }
+export function updateEnrollmentRequest(enrollment) {
+  return {
+    type: '@enrollment/UPDATE_ENROLLMENT_REQUEST',
+    payload: { enrollment },
+  };
+}
 
-// export function updateStudentSuccess(student) {
-//   return {
-//     type: '@student/UPDATE_ENROLLMENT_SUCCESS',
-//     payload: { student },
-//   };
-// }
+export function updateEnrollmentSuccess(enrollment) {
+  return {
+    type: '@enrollment/UPDATE_ENROLLMENT_SUCCESS',
+    payload: { enrollment },
+  };
+}
 
-// export function updateStudentFailure() {
-//   return {
-//     type: '@student/UPDATE_ENROLLMENT_FAILURE',
-//   };
-// }
+export function updateEnrollmentFailure() {
+  return {
+    type: '@enrollment/UPDATE_ENROLLMENT_FAILURE',
+  };
+}

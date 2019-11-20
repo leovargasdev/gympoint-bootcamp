@@ -20,7 +20,13 @@ class EnrollmentController {
       student_id,
     } = await Enrollment.findByPk(id);
 
-    return res.json({ start_date, end_date, price, plan_id, student_id });
+    return res.json({
+      start_date,
+      end_date: format(end_date, "yyyy'-'MM'-'dd"),
+      price,
+      plan_id,
+      student_id,
+    });
   }
 
   async update(req, res) {

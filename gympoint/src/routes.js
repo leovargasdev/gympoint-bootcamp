@@ -17,6 +17,7 @@ import EnrollmentsController from './app/controllers/EnrollmentsController';
 
 import CheckinController from './app/controllers/CheckinController';
 import HelpOrderController from './app/controllers/HelpOrderController';
+import HelpOrdersController from './app/controllers/HelpOrdersController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -38,6 +39,7 @@ routes.use(authMiddleware);
 
 // Help Orders
 routes.put('/help-orders/:id/answer', HelpOrderController.update);
+routes.get('/help-orders', HelpOrdersController.index);
 
 // Rotas referente a tabela Students
 routes.post('/students', StudentController.store);

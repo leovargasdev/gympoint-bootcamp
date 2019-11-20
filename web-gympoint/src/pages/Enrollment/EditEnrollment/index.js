@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Form, Input, Select } from '@rocketseat/unform';
 import { addMonths, format } from 'date-fns';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import { Container } from './styles';
-// import { editEnrollmentRequest } from '~/store/modules/enrollment/actions';
+import { updateEnrollmentRequest } from '~/store/modules/enrollment/actions';
 import api from '~/services/api';
 
 const schema = Yup.object().shape({
@@ -16,24 +16,28 @@ const schema = Yup.object().shape({
   ),
 });
 
-export default function EditEnrollment(props) {
-  // const dispatch = useDispatch();
+export default function EditEnrollment({ match }) {
+  const dispatch = useDispatch();
+  const [price, setPrice] = useState(0);
   const [enrollment, setEnrollment] = useState({});
   const [students, setStudents] = useState([]);
   const [plans, setPlans] = useState([]);
+  const [studentId, setStudentId] = useState(0);
   const [planId, setPlanId] = useState(0);
 
-  const { id } = props.match.params;
+  const { id } = match.params;
 
   useEffect(() => {
     async function loadEnrollment() {
-      const response = await api.get(`/enrollment/${id[0]}`);
+      const response = await api.get(`/enrollment/${id}`);
       setEnrollment(response.data);
-      setPlanId(response.data.plan_id);
+      setStudentId(enrollment.student_id);
+      setPlanId(enrollment.plan_id);
+      setPrice(enrollment.price);
     }
 
     loadEnrollment();
-  }, [id]);
+  }, [enrollment.plan_id, enrollment.price, enrollment.student_id, id]);
 
   const [startDate, setStartDate] = useState(
     format(new Date(), "yyyy'-'MM'-'dd")
@@ -53,11 +57,16 @@ export default function EditEnrollment(props) {
       setStudents(result);
     }
     loadFields();
-  }, [enrollment, planId]);
+  }, []);
+
+  useEffect(() => {
+    if (plans) setPrice(1);
+    // console.tron.log(enrollment);
+  }, [enrollment, planId, plans]);
 
   // const price = useMemo(
   //   () =>
-  //     planId && plans && plans[planId - 1].duration * plans[planId - 1].price,
+  //     planId && plans && ,
   //   [planId, plans]
   // );
 
@@ -66,14 +75,14 @@ export default function EditEnrollment(props) {
   //     planId &&
   //     format(
   //       addMonths(new Date(startDate), plans[planId - 1].duration),
-  //       "dd'/'MM'/'yyyy"
+  //       "yyyy'-'MM'-'dd"
   //     ),
   //   [planId, plans, startDate]
   // );
 
   function handleSubmit(data) {
-    console.tron.log(data);
-    // dispatch(newEnrollmentRequest(data));
+    console.tron.log({ ...data, id: 123 });
+    // dispatch(updateEnrollmentRequest({ ...data, id }));
   }
 
   return (
@@ -88,10 +97,16 @@ export default function EditEnrollment(props) {
 
       <Form schema={schema} initialData={enrollment} onSubmit={handleSubmit}>
         <label htmlFor="student_id">ALUNO</label>
-        <Select name="student_id" options={students} />
+        <Select
+          value={studentId}
+          name="student_id"
+          options={students}
+          onChange={e => setStudentId(e.target.value)}
+        />
 
         <label htmlFor="plan_id">PLANO</label>
         <Select
+          value={planId}
           name="plan_id"
           options={plans}
           onChange={e => setPlanId(e.target.value)}
@@ -106,10 +121,10 @@ export default function EditEnrollment(props) {
         />
 
         <label htmlFor="end_date">DATA DE TÉRMINO</label>
-        <Input name="end_date" disabled />
+        <Input type="date" name="end_date" disabled />
 
         <label htmlFor="price">VALOR FINAL</label>
-        <Input name="price" disabled />
+        <Input name="price" value={price} disabled />
 
         <button type="submit">Criar Matricula</button>
       </Form>

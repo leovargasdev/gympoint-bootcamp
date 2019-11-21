@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
-import api from '~/services/api';
 import { Container } from './styles';
 import { updatePlanRequest } from '~/store/modules/plan/actions';
 
@@ -13,19 +12,10 @@ const schema = Yup.object().shape({
   price: Yup.string().required('O preço é obrigatório'),
 });
 
-export default function EditPlan(props) {
+export default function EditPlan() {
   const dispatch = useDispatch();
-  const [plan, setPlan] = useState({});
-  const { id } = props.match.params;
-
-  useEffect(() => {
-    async function loadPlan() {
-      const response = await api.get(`/plan/${id[0]}`);
-      setPlan(response.data);
-    }
-
-    loadPlan();
-  }, [id]);
+  // corrigir esse bug
+  const plan = useSelector(state => state.plan.plan);
 
   const [duration, setDuration] = useState(plan.duration);
   const [price, setPrice] = useState(plan.price);
@@ -36,7 +26,7 @@ export default function EditPlan(props) {
   }, [price, duration]);
 
   function handleSubmit(data) {
-    dispatch(updatePlanRequest({ ...data, id }));
+    dispatch(updatePlanRequest({ ...data, id: plan.id }));
   }
 
   return (
@@ -65,7 +55,7 @@ export default function EditPlan(props) {
         <label htmlFor="total">Total</label>
         <Input name="total" value={total} disabled />
 
-        <button type="submit">Criar Plano</button>
+        <button type="submit">Atualizar Plano</button>
       </Form>
     </Container>
   );

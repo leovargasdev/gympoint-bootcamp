@@ -1,22 +1,16 @@
 import produce from 'immer';
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = {
+  plan: null,
+};
 
 export default function plan(state = INITIAL_STATE, action) {
   return produce(state, draft => {
     switch (action.type) {
-      // case '@auth/SIGN_IN_SUCCESS': {
-      //   draft.profile = action.payload.user;
-      //   break;
-      // }
-      // case '@user/UPDATE_PROFILE_SUCCESS': {
-      //   draft.profile = action.payload.profile;
-      //   break;
-      // }
-      // case '@user/SIGN_OUT': {
-      //   draft.profile = null;
-      //   break;
-      // }
+      case '@plan/GET_PLAN_SUCCESS': {
+        draft.plan = action.payload.plan;
+        break;
+      }
       default:
     }
   });

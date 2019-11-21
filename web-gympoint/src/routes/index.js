@@ -14,7 +14,7 @@ import EditPlan from '~/pages/Plan/EditPlan';
 
 import Enrollment from '~/pages/Enrollment/';
 import NewEnrollment from '~/pages/Enrollment/NewEnrollment';
-import EditEnrollment from '~/pages/Enrollment/EditEnrollment';
+// import EditEnrollment from '~/pages/Enrollment/EditEnrollment';
 
 import HelpOrder from '~/pages/HelpOrder';
 
@@ -33,7 +33,7 @@ export default function Routes() {
 
       <Route path="/enrollments" exact component={Enrollment} isPrivate />
       <Route path="/enrollment/new" component={NewEnrollment} isPrivate />
-      <Route path="/enrollment/:id/edit" component={EditEnrollment} isPrivate />
+      {/* <Route path="/enrollment/:id/edit" component={EditEnrollment} isPrivate /> */}
 
       <Route path="/help-orders" exact component={HelpOrder} isPrivate />
     </Switch>

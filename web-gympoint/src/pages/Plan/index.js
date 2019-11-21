@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { MdAdd } from 'react-icons/md';
 import {
   Container,
@@ -11,9 +12,11 @@ import {
 } from './styles';
 
 import api from '~/services/api';
+import { getPlanRequest } from '~/store/modules/plan/actions';
 
 export default function Plan() {
   const [plans, setPlans] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadPlans() {
@@ -27,6 +30,10 @@ export default function Plan() {
 
   function handleRemovePlan(id) {
     console.tron.log('id:', id);
+  }
+  function handleUpdatePlan(id) {
+    // eslint-disable-next-line
+    dispatch(getPlanRequest({id}));
   }
 
   return (
@@ -46,6 +53,7 @@ export default function Plan() {
             <th>TÍTULO</th>
             <th>DURAÇÃO</th>
             <th>VALOR p/ MÊS</th>
+            {/* eslint-disable-next-line */}
             <th />
           </tr>
         </thead>
@@ -67,7 +75,10 @@ export default function Plan() {
               {/* config */}
               <td>
                 <ConfigButtons>
-                  <BtnEdit to={`/plan/${plan.id}/edit`}>editar</BtnEdit>
+                  <BtnEdit onClick={() => handleUpdatePlan(plan.id)}>
+                    editar
+                  </BtnEdit>
+                  {/* <BtnEdit to={`/plan/${plan.id}/edit`}>editar</BtnEdit> */}
                   <BtnRemove
                     type="button"
                     onClick={() => handleRemovePlan('student_id')}

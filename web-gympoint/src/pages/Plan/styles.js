@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   width: 100%;
@@ -97,7 +97,7 @@ export const ConfigButtons = styled.div`
   justify-content: flex-end;
 `;
 
-export const BtnEdit = styled(Link)`
+export const BtnEdit = styled.button`
   background: none;
   border: 0;
   font-size: 15px;

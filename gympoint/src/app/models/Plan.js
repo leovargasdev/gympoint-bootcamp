@@ -10,7 +10,7 @@ class Plan extends Model {
         total: {
           type: Sequelize.VIRTUAL,
           get() {
-            return (this.price * this.duration).toFixed(2);
+            return Number((this.price * this.duration).toFixed(2));
           },
         },
       },

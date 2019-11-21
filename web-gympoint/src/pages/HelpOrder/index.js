@@ -65,6 +65,7 @@ export default function HelpOrder() {
         <thead>
           <tr>
             <th>ALUNO</th>
+            {/* eslint-disable-next-line */}
             <th />
           </tr>
         </thead>

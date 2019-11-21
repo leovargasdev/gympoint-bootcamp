@@ -18,6 +18,20 @@ export function newPlanFailure() {
   };
 }
 
+export function getPlanRequest(plan) {
+  return {
+    type: '@plan/GET_PLAN_REQUEST',
+    payload: { plan },
+  };
+}
+
+export function getPlanSuccess(plan) {
+  return {
+    type: '@plan/GET_PLAN_SUCCESS',
+    payload: { plan },
+  };
+}
+
 export function updatePlanRequest(plan) {
   return {
     type: '@plan/UPDATE_PLAN_REQUEST',

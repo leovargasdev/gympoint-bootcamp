@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdAdd, MdCheckCircle } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
+import { getEnrollmentRequest } from '~/store/modules/enrollment/actions';
 import {
   Container,
   StudentsTable,
@@ -13,20 +15,20 @@ import api from '~/services/api';
 
 export default function Enrollment() {
   const [enrollments, setEnrollments] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadEnrollments() {
       const response = await api.get('enrollments');
-      console.tron.log(response);
       setEnrollments(response.data);
     }
 
     loadEnrollments();
   }, []);
 
-  // function handleEditEnrollment(id){
-  //   console.tron.log(id)
-  // }
+  function handleEditEnrollment(id) {
+    dispatch(getEnrollmentRequest({ id }));
+  }
 
   return (
     <Container>
@@ -47,6 +49,7 @@ export default function Enrollment() {
             <th>INÍCIO</th>
             <th>TÉRMINO</th>
             <th>ATIVA</th>
+            {/* eslint-disable-next-line */}
             <th />
           </tr>
         </thead>
@@ -78,8 +81,8 @@ export default function Enrollment() {
               {/* config */}
               <td>
                 <ConfigButtons>
-                  {/* <BtnEdit onClick={() => handleEditEnrollment(enrollment.id)}> */}
-                  <BtnEdit to={`/enrollment/${enrollment.id}/edit`}>
+                  <BtnEdit onClick={() => handleEditEnrollment(enrollment.id)}>
+                    {/* <BtnEdit to={`/enrollment/${enrollment.id}/edit`}> */}
                     {/* to={`/enrollment/${enrollment.id}/edit`} */}
                     editar
                   </BtnEdit>

@@ -18,6 +18,20 @@ export function newEnrollmentFailure() {
   };
 }
 
+export function getEnrollmentRequest(enrollment) {
+  return {
+    type: '@enrollment/GET_ENROLLMENT_REQUEST',
+    payload: { enrollment },
+  };
+}
+
+export function getEnrollmentSuccess(enrollment) {
+  return {
+    type: '@enrollment/GET_ENROLLMENT_SUCCESS',
+    payload: { enrollment },
+  };
+}
+
 export function updateEnrollmentRequest(enrollment) {
   return {
     type: '@enrollment/UPDATE_ENROLLMENT_REQUEST',

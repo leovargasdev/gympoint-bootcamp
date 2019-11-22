@@ -35,7 +35,6 @@ export default function NewEnrollment() {
           title: e.name,
         };
       });
-
       setPlans(responsePlans.data);
       setStudents(result);
     }

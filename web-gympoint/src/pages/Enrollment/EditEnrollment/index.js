@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Select } from '@rocketseat/unform';
 import { addMonths, format } from 'date-fns';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import { Container } from './styles';
-import { updateEnrollmentRequest } from '~/store/modules/enrollment/actions';
+import {
+  updateEnrollmentRequest,
+  getEnrollmentRequest,
+} from '~/store/modules/enrollment/actions';
 import api from '~/services/api';
 
 const schema = Yup.object().shape({
@@ -16,32 +19,18 @@ const schema = Yup.object().shape({
   ),
 });
 
-export default function EditEnrollment({ match }) {
+export default function EditEnrollment(props) {
   const dispatch = useDispatch();
-  const [price, setPrice] = useState(0);
-  const [enrollment, setEnrollment] = useState({});
+  const id = Number(props.match.params.id);
+  const { enrollment } = useSelector(state => state.enrollment);
+
   const [students, setStudents] = useState([]);
   const [plans, setPlans] = useState([]);
-  const [studentId, setStudentId] = useState(0);
-  const [planId, setPlanId] = useState(0);
-
-  const { id } = match.params;
-
-  useEffect(() => {
-    async function loadEnrollment() {
-      const response = await api.get(`/enrollment/${id}`);
-      setEnrollment(response.data);
-      setStudentId(enrollment.student_id);
-      setPlanId(enrollment.plan_id);
-      setPrice(enrollment.price);
-    }
-
-    loadEnrollment();
-  }, [enrollment.plan_id, enrollment.price, enrollment.student_id, id]);
-
-  const [startDate, setStartDate] = useState(
-    format(new Date(), "yyyy'-'MM'-'dd")
-  );
+  const [planId, setPlanId] = useState(enrollment.plan_id);
+  const [price, setPrice] = useState(enrollment.price);
+  const [studentId, setStudentId] = useState(enrollment.student_id);
+  const [startDate, setStartDate] = useState(enrollment.start_date);
+  const [endDate, setEndDate] = useState(enrollment.end_date);
 
   useEffect(() => {
     async function loadFields() {
@@ -56,33 +45,39 @@ export default function EditEnrollment({ match }) {
       setPlans(responsePlans.data);
       setStudents(result);
     }
+    if (id !== enrollment.id) {
+      dispatch(getEnrollmentRequest({ id }));
+    }
     loadFields();
-  }, []);
+    // eslint-disable-next-line
+  }, [props]);
 
-  useEffect(() => {
-    if (plans) setPrice(1);
-    // console.tron.log(enrollment);
-  }, [enrollment, planId, plans]);
+  // Não sei pq mas isso não funciona, o useMemo carrega antes que o useEffect e assim o array plans está vazio e dá erro nas propriedades duration e price
+  // const price = useMemo( () => planId && plans[planId - 1].duration * plans[planId - 1].price, [planId, plans] );
 
-  // const price = useMemo(
-  //   () =>
-  //     planId && plans && ,
-  //   [planId, plans]
-  // );
+  function hadleSetEndDate() {
+    setEndDate(
+      format(
+        addMonths(new Date(startDate), plans[planId].duration),
+        'yyyy-MM-dd'
+      )
+    );
+  }
+  // Foi criada essa funções pois o useMemo dá pau.
+  function handleChangePlan(plan) {
+    setPlanId(plan);
+    setPrice(plans[planId].duration * plans[planId].price);
+    hadleSetEndDate();
+  }
 
-  // const end_date = useMemo(
-  //   () =>
-  //     planId &&
-  //     format(
-  //       addMonths(new Date(startDate), plans[planId - 1].duration),
-  //       "yyyy'-'MM'-'dd"
-  //     ),
-  //   [planId, plans, startDate]
-  // );
+  // Mesmo bug do price
+  function handleChangeStartDate(sd) {
+    setStartDate(sd);
+    hadleSetEndDate();
+  }
 
   function handleSubmit(data) {
-    console.tron.log({ ...data, id: 123 });
-    // dispatch(updateEnrollmentRequest({ ...data, id }));
+    dispatch(updateEnrollmentRequest({ ...data, id: enrollment.id }));
   }
 
   return (
@@ -109,19 +104,18 @@ export default function EditEnrollment({ match }) {
           value={planId}
           name="plan_id"
           options={plans}
-          onChange={e => setPlanId(e.target.value)}
+          onChange={e => handleChangePlan(e.target.value)}
         />
 
         <label htmlFor="start_date">DATA DE INÍCIO</label>
         <Input
           type="date"
           name="start_date"
-          value={startDate}
-          onChange={e => setStartDate(e.target.value)}
+          onChange={e => handleChangeStartDate(e.target.value)}
         />
 
         <label htmlFor="end_date">DATA DE TÉRMINO</label>
-        <Input type="date" name="end_date" disabled />
+        <Input type="date" value={endDate} name="end_date" disabled />
 
         <label htmlFor="price">VALOR FINAL</label>
         <Input name="price" value={price} disabled />

@@ -10,22 +10,24 @@ import SuccessEnrollmentMail from '../jobs/SuccessEnrollmentMail';
 
 class EnrollmentController {
   async index(req, res) {
-    const { id } = req.params;
+    const { id: enrollmentId } = req.params;
 
     const {
+      id,
       start_date,
       end_date,
       price,
       plan_id,
       student_id,
-    } = await Enrollment.findByPk(id);
+    } = await Enrollment.findByPk(enrollmentId);
 
     return res.json({
-      start_date,
-      end_date: format(end_date, "yyyy'-'MM'-'dd"),
+      id,
       price,
       plan_id,
       student_id,
+      start_date: format(start_date, "yyyy'-'MM'-'dd"),
+      end_date: format(end_date, "yyyy'-'MM'-'dd"),
     });
   }
 

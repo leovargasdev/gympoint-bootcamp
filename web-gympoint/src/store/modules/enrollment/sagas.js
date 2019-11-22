@@ -6,6 +6,7 @@ import api from '~/services/api';
 import {
   newEnrollmentSuccess,
   newEnrollmentFailure,
+  getEnrollmentSuccess,
   updateEnrollmentFailure,
   updateEnrollmentSuccess,
 } from './actions';
@@ -27,6 +28,18 @@ export function* newEnrollment({ payload }) {
   } catch (err) {
     toast.error('Falha ao criar essa matrícula!!!');
     yield put(newEnrollmentFailure());
+  }
+}
+
+export function* getEnrollment({ payload }) {
+  try {
+    const { id } = payload.enrollment;
+
+    const response = yield call(api.get, `/enrollment/${id}`);
+    yield put(getEnrollmentSuccess(response.data));
+    history.push(`/enrollment/${id}/edit`);
+  } catch (err) {
+    toast.error('Falha ao localizar a matrícula!!!');
   }
 }
 
@@ -52,5 +65,6 @@ export function* updateEnrollment({ payload }) {
 
 export default all([
   takeLatest('@enrollment/NEW_ENROLLMENT_REQUEST', newEnrollment),
+  takeLatest('@enrollment/GET_ENROLLMENT_REQUEST', getEnrollment),
   takeLatest('@enrollment/UPDATE_ENROLLMENT_REQUEST', updateEnrollment),
 ]);

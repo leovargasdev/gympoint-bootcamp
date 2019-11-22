@@ -25,5 +25,6 @@ export function* updateOrder({ payload }) {
 }
 
 export default all([
+  // takeLatest('@helpOrder/GET_HELP_ORDER_REQUEST', updateOrder),
   takeLatest('@helpOrder/UPDATE_HELP_ORDER_REQUEST', updateOrder),
 ]);

@@ -57,7 +57,8 @@ export default function EditEnrollment() {
   }, [id]);
 
   useMemo(() => {
-    const p = plans.find(p => p.id == plan);
+    // eslint-disable-next-line
+    const p = plans.find(e => e.id == plan);
     if (p) {
       const { duration, price: priceP } = p;
       setEndDate(

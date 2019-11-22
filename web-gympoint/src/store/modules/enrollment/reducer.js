@@ -1,7 +1,14 @@
 import produce from 'immer';
 
 const INITIAL_STATE = {
-  enrollment: null,
+  enrollment: {
+    id: null,
+    price: 0,
+    plan_id: null,
+    student_id: null,
+    start_date: new Date(),
+    end_date: new Date(),
+  },
 };
 
 export default function enrollment(state = INITIAL_STATE, action) {
@@ -11,14 +18,6 @@ export default function enrollment(state = INITIAL_STATE, action) {
         draft.enrollment = action.payload.enrollment;
         break;
       }
-      // case '@user/UPDATE_PROFILE_SUCCESS': {
-      //   draft.profile = action.payload.profile;
-      //   break;
-      // }
-      // case '@user/SIGN_OUT': {
-      //   draft.profile = null;
-      //   break;
-      // }
       default:
     }
   });

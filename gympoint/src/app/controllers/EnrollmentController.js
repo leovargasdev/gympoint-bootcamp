@@ -44,9 +44,7 @@ class EnrollmentController {
     if (!enrollment)
       return res.status(401).json({ error: 'Enrollment not found' });
 
-    const { plan_id, start_date: sd, student_id } = req.body;
-    // Pega a nova data ou a antiga, para poder calcular o end_data
-    const start_date = sd || enrollment.start_date;
+    const { plan_id, start_date, student_id } = req.body;
 
     const plan = await Plan.findByPk(plan_id);
 
@@ -64,7 +62,7 @@ class EnrollmentController {
       plan_id,
       start_date,
       end_date: plan
-        ? addMonths(start_date, plan.duration)
+        ? addMonths(new Date(start_date), plan.duration)
         : enrollment.end_date,
       price: plan ? plan.duration * plan.price : enrollment.price,
     });

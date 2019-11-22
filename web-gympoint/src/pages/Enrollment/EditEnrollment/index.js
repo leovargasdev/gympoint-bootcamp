@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Form, Input, Select } from '@rocketseat/unform';
-import { addMonths, format } from 'date-fns';
+import { useParams } from 'react-router-dom';
+import { addMonths, format, parseISO } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
@@ -19,30 +20,33 @@ const schema = Yup.object().shape({
   ),
 });
 
-export default function EditEnrollment(props) {
+export default function EditEnrollment() {
   const dispatch = useDispatch();
-  const id = Number(props.match.params.id);
+  const { id } = useParams();
   const { enrollment } = useSelector(state => state.enrollment);
 
   const [students, setStudents] = useState([]);
   const [plans, setPlans] = useState([]);
-  const [planId, setPlanId] = useState(enrollment.plan_id);
+
+  const [plan, setPlan] = useState(enrollment.plan_id);
+  const [student, setStudent] = useState(enrollment.student_id);
   const [price, setPrice] = useState(enrollment.price);
-  const [studentId, setStudentId] = useState(enrollment.student_id);
+
   const [startDate, setStartDate] = useState(enrollment.start_date);
   const [endDate, setEndDate] = useState(enrollment.end_date);
 
   useEffect(() => {
     async function loadFields() {
-      const responsePlans = await api.get('plans');
-      const responseStudents = await api.get('students');
-      const result = responseStudents.data.map(e => {
+      const responseP = await api.get('plans');
+      setPlans(responseP.data);
+
+      const responseS = await api.get('students');
+      const result = responseS.data.map(e => {
         return {
           id: e.id,
           title: e.name,
         };
       });
-      setPlans(responsePlans.data);
       setStudents(result);
     }
     if (id !== enrollment.id) {
@@ -50,40 +54,28 @@ export default function EditEnrollment(props) {
     }
     loadFields();
     // eslint-disable-next-line
-  }, [props]);
+  }, [id]);
 
-  // Não sei pq mas isso não funciona, o useMemo carrega antes que o useEffect e assim o array plans está vazio e dá erro nas propriedades duration e price
-  // const price = useMemo( () => planId && plans[planId - 1].duration * plans[planId - 1].price, [planId, plans] );
-
-  function hadleSetEndDate() {
-    setEndDate(
-      format(
-        addMonths(new Date(startDate), plans[planId].duration),
-        'yyyy-MM-dd'
-      )
-    );
-  }
-  // Foi criada essa funções pois o useMemo dá pau.
-  function handleChangePlan(plan) {
-    setPlanId(plan);
-    setPrice(plans[planId].duration * plans[planId].price);
-    hadleSetEndDate();
-  }
-
-  // Mesmo bug do price
-  function handleChangeStartDate(sd) {
-    setStartDate(sd);
-    hadleSetEndDate();
-  }
+  useMemo(() => {
+    const p = plans.find(p => p.id == plan);
+    if (p) {
+      const { duration, price: priceP } = p;
+      setEndDate(
+        format(addMonths(parseISO(startDate), duration), 'yyyy-MM-dd')
+      );
+      setPrice(duration * priceP);
+    }
+    // eslint-disable-next-line
+  }, [startDate, plan]);
 
   function handleSubmit(data) {
-    dispatch(updateEnrollmentRequest({ ...data, id: enrollment.id }));
+    dispatch(updateEnrollmentRequest({ ...data, id }));
   }
 
   return (
     <Container>
       <header>
-        <strong>Editar matrícula</strong>
+        <strong>Editar matrícula teste</strong>
         <div>
           <button type="button">VOLTAR</button>
           <button type="button">SALVAR</button>
@@ -93,25 +85,25 @@ export default function EditEnrollment(props) {
       <Form schema={schema} initialData={enrollment} onSubmit={handleSubmit}>
         <label htmlFor="student_id">ALUNO</label>
         <Select
-          value={studentId}
+          value={student}
           name="student_id"
           options={students}
-          onChange={e => setStudentId(e.target.value)}
+          onChange={e => setStudent(e.target.value)}
         />
 
         <label htmlFor="plan_id">PLANO</label>
         <Select
-          value={planId}
+          value={plan}
           name="plan_id"
           options={plans}
-          onChange={e => handleChangePlan(e.target.value)}
+          onChange={e => setPlan(e.target.value)}
         />
 
         <label htmlFor="start_date">DATA DE INÍCIO</label>
         <Input
           type="date"
           name="start_date"
-          onChange={e => handleChangeStartDate(e.target.value)}
+          onChange={e => setStartDate(e.target.value)}
         />
 
         <label htmlFor="end_date">DATA DE TÉRMINO</label>
@@ -120,7 +112,7 @@ export default function EditEnrollment(props) {
         <label htmlFor="price">VALOR FINAL</label>
         <Input name="price" value={price} disabled />
 
-        <button type="submit">Criar Matricula</button>
+        <button type="submit">Atualizar Matricula</button>
       </Form>
     </Container>
   );

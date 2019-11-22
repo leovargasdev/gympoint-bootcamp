@@ -40,6 +40,7 @@ export function* getEnrollment({ payload }) {
     history.push(`/enrollment/${id}/edit`);
   } catch (err) {
     toast.error('Falha ao localizar a matrícula!!!');
+    history.push('/enrollments');
   }
 }
 
@@ -47,11 +48,12 @@ export function* updateEnrollment({ payload }) {
   try {
     const { student_id, plan_id, start_date, id } = payload.enrollment;
 
-    const response = yield call(api.put, `/enrollments/${id}`, {
-      student_id,
-      plan_id,
-      start_date,
-    });
+    const enrollment = { student_id, plan_id, start_date };
+    console.tron.log(enrollment, id);
+
+    const response = yield call(api.put, `/enrollments/${id}`, enrollment);
+
+    console.tron.log(response);
 
     toast.success('Matrícula atualizada com sucesso!!!');
 

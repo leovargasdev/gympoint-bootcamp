@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
+import Modal from 'react-modal';
 import {
   Container,
   StudentsTable,
@@ -9,14 +10,41 @@ import {
   ConfigButtons,
   BtnEdit,
   BtnRemove,
+  ContentModal,
+  ModalRemoveStudent,
+  ModalCancelRemoveStudent,
 } from './styles';
 
 import { deleteStudentRequest } from '~/store/modules/student/actions';
 import api from '~/services/api';
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
+Modal.setAppElement('#root');
+
 export default function Students() {
   const dispatch = useDispatch();
   const [students, setStudents] = useState([]);
+  const [modalStudent, setModalStudent] = useState({});
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal({ name, id }) {
+    setIsOpen(true);
+    setModalStudent({ name, id });
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   useEffect(() => {
     async function loadStudents() {
@@ -30,6 +58,7 @@ export default function Students() {
 
   function handleRemoveStudent(id) {
     dispatch(deleteStudentRequest({ id }));
+    closeModal();
   }
 
   return (
@@ -73,10 +102,7 @@ export default function Students() {
               <td>
                 <ConfigButtons>
                   <BtnEdit to={`/student/${student.id}/edit`}>editar</BtnEdit>
-                  <BtnRemove
-                    type="button"
-                    onClick={() => handleRemoveStudent(student.id)}
-                  >
+                  <BtnRemove type="button" onClick={() => openModal(student)}>
                     apagar
                   </BtnRemove>
                 </ConfigButtons>
@@ -85,6 +111,29 @@ export default function Students() {
           ))}
         </tbody>
       </StudentsTable>
+      <div>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Remover Aluno"
+        >
+          <ContentModal>
+            <strong>
+              Deseja remover o aluno <span>{modalStudent.name}</span>?
+            </strong>
+            <ModalRemoveStudent
+              type="button"
+              onClick={() => handleRemoveStudent(modalStudent.id)}
+            >
+              SIM
+            </ModalRemoveStudent>
+            <ModalCancelRemoveStudent type="button">
+              NÃO
+            </ModalCancelRemoveStudent>
+          </ContentModal>
+        </Modal>
+      </div>
     </Container>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import {
@@ -10,9 +11,11 @@ import {
   BtnRemove,
 } from './styles';
 
+import { deleteStudentRequest } from '~/store/modules/student/actions';
 import api from '~/services/api';
 
 export default function Students() {
+  const dispatch = useDispatch();
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
@@ -26,7 +29,7 @@ export default function Students() {
   }, [students]);
 
   function handleRemoveStudent(id) {
-    console.tron.log('id:', id);
+    dispatch(deleteStudentRequest({ id }));
   }
 
   return (
@@ -47,6 +50,7 @@ export default function Students() {
             <th>NOME</th>
             <th>EMAIL</th>
             <th>IDADE</th>
+            {/* eslint-disable-next-line */}
             <th />
           </tr>
         </thead>
@@ -71,7 +75,7 @@ export default function Students() {
                   <BtnEdit to={`/student/${student.id}/edit`}>editar</BtnEdit>
                   <BtnRemove
                     type="button"
-                    onClick={() => handleRemoveStudent('student_id')}
+                    onClick={() => handleRemoveStudent(student.id)}
                   >
                     apagar
                   </BtnRemove>

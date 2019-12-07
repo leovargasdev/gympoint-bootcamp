@@ -8,6 +8,8 @@ import {
   newStudentFailure,
   updateStudentFailure,
   updateStudentSuccess,
+  deleteStudentSuccess,
+  deleteStudentFailure,
 } from './actions';
 
 export function* newStudent({ payload }) {
@@ -59,7 +61,25 @@ export function* updateStudent({ payload }) {
   }
 }
 
+export function* deleteStudent({ payload }) {
+  try {
+    const { id } = payload.student;
+
+    const response = yield call(api.delete, `/students/${id}`);
+
+    toast.success('Aluno excluído com sucesso!!!');
+
+    yield put(deleteStudentSuccess(response.data));
+    history.push('/students');
+  } catch (err) {
+    console.tron.log(err.message);
+    toast.error('Falha ao excluir aluno!!!');
+    yield put(deleteStudentFailure());
+  }
+}
+
 export default all([
   takeLatest('@student/NEW_STUDENT_REQUEST', newStudent),
   takeLatest('@student/UPDATE_STUDENT_REQUEST', updateStudent),
+  takeLatest('@student/DELETE_STUDENT_REQUEST', deleteStudent),
 ]);

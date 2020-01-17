@@ -37,9 +37,8 @@ export default function Students() {
   const [modalStudent, setModalStudent] = useState({});
   const [modalIsOpen, setIsOpen] = useState(false);
 
-  function openModal({ name, id }) {
-    setIsOpen(true);
-    setModalStudent({ name, id });
+  function openModalRemoveStudent() {
+    setModalGlobalRemove(true);
   }
 
   function closeModal() {
@@ -102,7 +101,10 @@ export default function Students() {
               <td>
                 <ConfigButtons>
                   <BtnEdit to={`/student/${student.id}/edit`}>editar</BtnEdit>
-                  <BtnRemove type="button" onClick={() => openModal(student)}>
+                  <BtnRemove
+                    type="button"
+                    onClick={() => openModalRemoveStudent(student)}
+                  >
                     apagar
                   </BtnRemove>
                 </ConfigButtons>

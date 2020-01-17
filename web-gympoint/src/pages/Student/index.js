@@ -38,7 +38,7 @@ export default function Students() {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   function openModalRemoveStudent() {
-    setModalGlobalRemove(true);
+    // setModalGlobalRemove(true);
   }
 
   function closeModal() {
